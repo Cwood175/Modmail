@@ -104,7 +104,9 @@ class Thread:
         return self._recipient
 
     @property
-    def recipients(self) -> typing.List[typing.Union[discord.User, discord.Member]]:
+    def recipients(self) -> typing.List[
+        typing.Union[discord.User, discord.Member]
+    ]:
         return [self._recipient] + self._other_recipients
 
     @property
@@ -158,7 +160,9 @@ class Thread:
             "topic": channel.topic,
             "slowmode_delay": channel.slowmode_delay,
             "nsfw": channel.nsfw,
-            "overwrites": [(role.id, perm._values) for role, perm in channel.overwrites.items()],
+            "overwrites": [
+                (role.id, perm._values) for role, perm in channel.overwrites.items()
+            ],
             "messages": [
                 {
                     "author_id": m.author.id,
