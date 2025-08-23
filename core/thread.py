@@ -171,10 +171,10 @@ class Thread:
                         "mod_only"
                         if (
                             m.embeds
-                            and getattr(m.embeds[0], 'author', None)
+                            and getattr(m.embeds[0], "author", None)
                             and (
-                                getattr(m.embeds[0].author, 'name', '').startswith('Note') or
-                                getattr(m.embeds[0].author, 'name', '').startswith('Persistent Note')
+                                getattr(m.embeds[0].author, "name", "").startswith("Note")
+                                or getattr(m.embeds[0].author, "name", "").startswith("Persistent Note")
                             )
                         )
                         else None
@@ -185,12 +185,13 @@ class Thread:
                 # Only include if not already internal/note, safe check for embed author
                 if not (
                     m.embeds
-                    and getattr(m.embeds[0], 'author', None)
+                    and getattr(m.embeds[0], "author", None)
                     and (
-                        getattr(m.embeds[0].author, 'name', '').startswith('Note') or
-                        getattr(m.embeds[0].author, 'name', '').startswith('Persistent Note')
+                        getattr(m.embeds[0].author, "name", "").startswith("Note")
+                        or getattr(m.embeds[0].author, "name", "").startswith("Persistent Note")
                     )
-                ) and getattr(m, "type", None) not in ("internal", "note")
+                )
+                and getattr(m, "type", None) not in ("internal", "note")
             ],
             "snoozed_by": getattr(moderator, "name", None) if moderator else None,
             "snooze_command": command_used,
@@ -770,7 +771,9 @@ class Thread:
         human_time = discord.utils.format_dt(reset_time)
 
         if self.bot.config.get("thread_auto_close_silently"):
-            return await self.close(closer=self.bot.user, silent=True, after=int(seconds), auto_close=True)
+            return await self.close(
+                closer=self.bot.user, silent=True, after=int(seconds), auto_close=True
+            )
 
         # Grab message
         close_message = self.bot.formatter.format(
