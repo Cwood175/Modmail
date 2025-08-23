@@ -143,13 +143,13 @@ class Thread:
         if not self.log_key:
             # Try to fetch from DB using channel_id
             log_entry = await self.bot.api.get_log(self.channel.id)
-            if log_entry and 'key' in log_entry:
-                self.log_key = log_entry['key']
+            if log_entry and "key" in log_entry:
+                self.log_key = log_entry["key"]
             # Fallback: try by recipient id
-            elif hasattr(self, 'id'):
+            elif hasattr(self, "id"):
                 log_entry = await self.bot.api.get_log(str(self.id))
-                if log_entry and 'key' in log_entry:
-                    self.log_key = log_entry['key']
+                if log_entry and "key" in log_entry:
+                    self.log_key = log_entry["key"]
 
         self.snooze_data = {
             "category_id": channel.category_id,
@@ -171,10 +171,10 @@ class Thread:
                         "mod_only"
                         if (
                             m.embeds
-                            and getattr(m.embeds[0], 'author', None)
+                            and getattr(m.embeds[0], "author", None)
                             and (
-                                getattr(m.embeds[0].author, 'name', '').startswith('Note') or
-                                getattr(m.embeds[0].author, 'name', '').startswith('Persistent Note')
+                                getattr(m.embeds[0].author, "name", "").startswith("Note")
+                                or getattr(m.embeds[0].author, "name", "").startswith("Persistent Note")
                             )
                         )
                         else None
@@ -185,10 +185,10 @@ class Thread:
                 # Only include if not already internal/note, safe check for embed author
                 if not (
                     m.embeds
-                    and getattr(m.embeds[0], 'author', None)
+                    and getattr(m.embeds[0], "author", None)
                     and (
-                        getattr(m.embeds[0].author, 'name', '').startswith('Note') or
-                        getattr(m.embeds[0].author, 'name', '').startswith('Persistent Note')
+                        getattr(m.embeds[0].author, "name", "").startswith("Note")
+                        or getattr(m.embeds[0].author, "name", "").startswith("Persistent Note")
                     )
                 ) and getattr(m, "type", None) not in ("internal", "note")
             ],
@@ -264,7 +264,10 @@ class Thread:
                 username = msg.get("author_name") or (getattr(author, "name", None)) or "Unknown"
                 user_id = msg.get("author_id")
                 if embeds:
-                    embeds[0].set_author(name=f"{username} ({user_id})", icon_url=author.display_avatar.url if author and hasattr(author, "display_avatar") else None)
+                    embeds[0].set_author(
+                        name=f"{username} ({user_id})",
+                        icon_url=author.display_avatar.url if author and hasattr(author, "display_avatar") else None,
+                    )
                     await channel.send(embeds=embeds)
                 else:
                     formatted = f"**{username} ({user_id})**: {content}" if content else f"**{username} ({user_id})**"
@@ -642,9 +645,7 @@ class Thread:
             prefix = self.bot.config["log_url_prefix"].strip("/")
             if prefix == "NONE":
                 prefix = ""
-            log_url = (
-                f"{self.bot.config['log_url'].strip('/')}{'/' + prefix if prefix else ''}/{log_data['key']}"
-            )
+            log_url = f"{self.bot.config['log_url'].strip('/')}{'/' + prefix if prefix else ''}/{log_data['key']}"
 
             if log_data["title"]:
                 sneak_peak = log_data["title"]
@@ -773,9 +774,7 @@ class Thread:
             return await self.close(closer=self.bot.user, silent=True, after=int(seconds), auto_close=True)
 
         # Grab message
-        close_message = self.bot.formatter.format(
-            self.bot.config["thread_auto_close_response"], timeout=human_time
-        )
+        close_message = self.bot.formatter.format(self.bot.config["thread_auto_close_response"], timeout=human_time)
 
         time_marker_regex = "%t"
         if len(re.findall(time_marker_regex, close_message)) == 1:
@@ -887,9 +886,7 @@ class Thread:
 
         await asyncio.gather(*tasks)
 
-    async def delete_message(
-        self, message: typing.Union[int, discord.Message] = None, note: bool = True
-    ) -> None:
+    async def delete_message(self, message: typing.Union[int, discord.Message] = None, note: bool = True) -> None:
         if isinstance(message, discord.Message):
             message1, *message2 = await self.find_linked_messages(message1=message, note=note)
         else:
@@ -987,9 +984,7 @@ class Thread:
             embed.description = content
             await asyncio.gather(self.bot.api.edit_message(message.id, content), msg.edit(embed=embed))
 
-    async def note(
-        self, message: discord.Message, persistent=False, thread_creation=False
-    ) -> discord.Message:
+    async def note(self, message: discord.Message, persistent=False, thread_creation=False) -> discord.Message:
         if not message.content and not message.attachments and not message.stickers:
             raise MissingRequiredArgument(DummyParam("msg"))
 
