@@ -331,7 +331,8 @@ class ConfigManager:
                 return int(value.lstrip("#"), base=16)
             except ValueError:
                 logger.error("Invalid %s provided.", key)
-            value = int(self.remove(key).lstrip("#"), base=16)
+                value = self.remove(key)
+            value = int(value.lstrip("#"), base=16)
 
         elif key in self.time_deltas:
             if not isinstance(value, isodate.Duration):
